@@ -20,16 +20,24 @@ pipeline {
             }
             post {
                 success {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Run Tests Stage: SUCCESS',
-                        body: 'Run tests stage completed successfully.',
-                        attachLog: true
+                    script {
+                        emailext(
+                            to: 'manyakhosla63@gmail.com',
+                            subject: 'Run Tests Stage: SUCCESS',
+                            body: 'The Run Tests stage completed successfully.',
+                            attachLog: true
+                        )
+                    }
                 }
                 failure {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Run Tests Stage: FAILURE',
-                        body: 'Run tests stage failed.',
-                        attachLog: true
+                    script {
+                        emailext(
+                            to: 'manyakhosla63@gmail.com',
+                            subject: 'Run Tests Stage: FAILURE',
+                            body: 'The Run Tests stage failed.',
+                            attachLog: true
+                        )
+                    }
                 }
             }
         }
@@ -46,16 +54,24 @@ pipeline {
             }
             post {
                 success {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Security Scan: SUCCESS',
-                        body: 'Security scan completed successfully.',
-                        attachLog: true
+                    script {
+                        emailext(
+                            to: 'manyakhosla63@gmail.com',
+                            subject: 'Security Scan: SUCCESS',
+                            body: 'The security scan completed successfully.',
+                            attachLog: true
+                        )
+                    }
                 }
                 failure {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Security Scan: FAILURE',
-                        body: 'Security scan failed.',
-                        attachLog: true
+                    script {
+                        emailext(
+                            to: 'manyakhosla63@gmail.com',
+                            subject: 'Security Scan: FAILURE',
+                            body: 'The security scan failed.',
+                            attachLog: true
+                        )
+                    }
                 }
             }
         }
