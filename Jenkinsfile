@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "C:\\Program Files\\nodejs;${env.PATH}"
-        SNYK_TOKEN = "b9938d0b-5213-4920-9859-e01b6a5993bb" // ⚠️ Hardcoded token (avoid in real systems)
+        SNYK_TOKEN = "b9938d0b-5213-4920-9859-e01b6a5993bb" 
     }
 
     stages {
