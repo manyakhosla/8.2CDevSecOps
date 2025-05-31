@@ -18,6 +18,20 @@ pipeline {
             steps {
                 bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm test || exit /b 0'
             }
+            post {
+                success {
+                    emailext to: 'manyakhosla63@gmail.com',
+                        subject: 'Run Tests Stage: SUCCESS',
+                        body: 'Run tests stage completed successfully.',
+                        attachLog: true
+                }
+                failure {
+                    emailext to: 'manyakhosla63@gmail.com',
+                        subject: 'Run Tests Stage: FAILURE',
+                        body: 'Run tests stage failed.',
+                        attachLog: true
+                }
+            }
         }
 
         stage('Generate Coverage Report') {
@@ -26,9 +40,23 @@ pipeline {
             }
         }
 
-        stage('Security Scan') {
+        stage('NPM Audit (Security Scan)') {
             steps {
                 bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm audit || exit /b 0'
+            }
+            post {
+                success {
+                    emailext to: 'manyakhosla63@gmail.com',
+                        subject: 'Security Scan: SUCCESS',
+                        body: 'Security scan completed successfully.',
+                        attachLog: true
+                }
+                failure {
+                    emailext to: 'manyakhosla63@gmail.com',
+                        subject: 'Security Scan: FAILURE',
+                        body: 'Security scan failed.',
+                        attachLog: true
+                }
             }
         }
     }
