@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-    
     stages {
         stage('Checkout') {
             steps {
@@ -11,25 +10,25 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat '"C:\\Program Files\\nodejs\\npm.cmd" install'
+                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '"C:\\Program Files\\nodejs\\npm.cmd" test || exit /b 0'
+                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm test || exit /b 0'
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                bat '"C:\\Program Files\\nodejs\\npm.cmd" run coverage || exit /b 0'
+                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm run coverage || exit /b 0'
             }
         }
 
         stage('Security Scan') {
             steps {
-                bat '"C:\\Program Files\\nodejs\\npm.cmd" audit || exit /b 0'
+                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm audit || exit /b 0'
             }
         }
     }
