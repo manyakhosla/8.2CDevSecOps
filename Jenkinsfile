@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        NODE_PATH = '"C:\\Program Files\\nodejs\\npm.cmd"'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,13 +14,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                bat "${env.NODE_PATH} install"
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'npm test || exit /b 0'
+                bat "${env.NODE_PATH} test || exit /b 0"
             }
             post {
                 success {
@@ -36,7 +40,7 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                bat 'npm audit || exit /b 0'
+                bat "${env.NODE_PATH} audit || exit /b 0"
             }
             post {
                 success {
