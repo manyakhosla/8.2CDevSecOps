@@ -1,11 +1,7 @@
 pipeline {
     agent any
 
-    tools {
-        // Optional: If using Jenkins NodeJS plugin
-        // nodejs 'NodeJS 18'
-    }
-
+    
     stages {
         stage('Checkout') {
             steps {
