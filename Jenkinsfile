@@ -1,63 +1,56 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "C:\\Program Files\\nodejs;${env.PATH}"
+        SNYK_TOKEN = "b9938d0b-5213-4920-9859-e01b6a5993bb" // ⚠️ Hardcoded token (avoid in real systems)
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/manyakhosla/8.2CDevSecOps'
+                git branch: 'main', url: 'https://github.com/manyakhosla/8.2CDevSecOps.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm install'
+                bat 'npm install'
+            }
+        }
+
+        stage('Authenticate Snyk') {
+            steps {
+                bat "snyk auth %SNYK_TOKEN%"
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm test || exit /b 0'
-            }
-            post {
-                success {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Run Tests Stage: SUCCESS',
-                        body: 'Run tests stage completed successfully.',
-                        attachLog: true
-                }
-                failure {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Run Tests Stage: FAILURE',
-                        body: 'Run tests stage failed.',
-                        attachLog: true
-                }
+                bat 'npm test || exit /b 0'
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm run coverage || exit /b 0'
+                bat 'npm run coverage || exit /b 0'
             }
         }
 
         stage('NPM Audit (Security Scan)') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm audit || exit /b 0'
+                bat 'npm audit || exit /b 0'
             }
-            post {
-                success {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Security Scan: SUCCESS',
-                        body: 'Security scan completed successfully.',
-                        attachLog: true
-                }
-                failure {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Security Scan: FAILURE',
-                        body: 'Security scan failed.',
-                        attachLog: true
-                }
-            }
+        }
+    }
+
+    post {
+        always {
+            emailext(
+                subject: "Jenkins Build: ${currentBuild.fullDisplayName}",
+                body: "Build ${currentBuild.currentResult}: ${env.BUILD_URL}",
+                to: "manyakhosla63@gmail.com"
+            )
         }
     }
 }
