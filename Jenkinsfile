@@ -26,7 +26,7 @@ pipeline {
                         attachLog: true
                 }
                 failure {
-                    emailext to: 'alfithomas13@gmail.com',
+                    emailext to: 'manyakhosla63@gmail.com',
                         subject: 'Run Tests Stage: FAILURE',
                         body: 'Run tests stage failed.',
                         attachLog: true
