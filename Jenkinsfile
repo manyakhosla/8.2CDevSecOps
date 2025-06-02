@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Add Node.js to the PATH if not already present system-wide
         PATH = "C:\\Program Files\\nodejs;${env.PATH}"
     }
 
