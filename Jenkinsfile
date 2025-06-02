@@ -1,62 +1,39 @@
 pipeline {
     agent any
 
+    environment {
+        // Add Node.js to the PATH if not already present system-wide
+        PATH = "C:\\Program Files\\nodejs;${env.PATH}"
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/manyakhosla/8.2CDevSecOps'
+                git branch: 'main', url: 'https://github.com/manyakhosla/8.2CDevSecOps.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm install'
+                bat 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm test || exit /b 0'
-            }
-            post {
-                success {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Run Tests Stage: SUCCESS',
-                        body: 'Run tests stage completed successfully.',
-                        attachLog: true
-                }
-                failure {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Run Tests Stage: FAILURE',
-                        body: 'Run tests stage failed.',
-                        attachLog: true
-                }
+                bat 'npm test || exit /b 0' // Continue even if tests fail
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm run coverage || exit /b 0'
+                bat 'npm run coverage || exit /b 0'
             }
         }
 
         stage('NPM Audit (Security Scan)') {
             steps {
-                bat 'set PATH=C:\\Program Files\\nodejs;%PATH% && npm audit || exit /b 0'
-            }
-            post {
-                success {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Security Scan: SUCCESS',
-                        body: 'Security scan completed successfully.',
-                        attachLog: true
-                }
-                failure {
-                    emailext to: 'manyakhosla63@gmail.com',
-                        subject: 'Security Scan: FAILURE',
-                        body: 'Security scan failed.',
-                        attachLog: true
-                }
+                bat 'npm audit || exit /b 0'
             }
         }
     }
